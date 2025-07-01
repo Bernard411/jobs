@@ -178,11 +178,11 @@ def ajax_messages(request, recipient_id):
     recipient = get_object_or_404(User, id=recipient_id)
     messages_qs = Message.objects.filter(
         (Q(sender=request.user, recipient=recipient) | Q(sender=recipient, recipient=request.user))
-    ).order_by('timestamp')
+    ).order_by('sent_at')
     messages = [
         {
             'content': m.content,
-            'timestamp': m.timestamp.strftime('%Y-%m-%d %H:%M'),
+            'timestamp': m.sent_at.strftime('%Y-%m-%d %H:%M'),
             'is_sender': m.sender == request.user
         } for m in messages_qs
     ]
