@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div id="tab-content-home" class="tab-content-x">
+<div id="tab-content-home" class="tab-content-x" style="margin-top: 30px;">
     <div class="tweet-box">
         <form method="get" class="row g-2 align-items-center">
             <div class="col-12 col-md-3">
@@ -45,9 +45,8 @@
             {% if job.image or job.image == None %}
             <div class="mt-2">
                 <img src="{% if job.image %}{{ job.image.url }}{% else %}https://static.vecteezy.com/system/resources/previews/009/971/674/non_2x/we-are-hiring-hanging-signs-on-yellow-background-education-concept-for-business-marketing-flyers-banners-presentations-and-posters-illustration-vector.jpg{% endif %}"
-                     alt="Job Post Image" class="img-fluid rounded-4 w-100" style="max-height: 320px; object-fit: cover; background: #eee;">
+                     alt="Job Post Image" class="img-fluid rounded-4 w-100" style="max-height: 280px; object-fit: cover; background: #eee;">
             </div>
-            
             {% endif %}
             <div class="mt-2">
                 <a href="{% url 'job_detail' job.id %}" class="btn btn-sm btn-outline-info">View</a>
@@ -64,7 +63,6 @@
         </div>
     </div>
     {% endfor %}
-   -->
 </div>
 <div id="tab-content-explore" class="tab-content-x" style="display:none">
     <div class="tweet">
