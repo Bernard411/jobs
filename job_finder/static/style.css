@@ -24,7 +24,7 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+     font-family: 'Troy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px; /* Reduced base font size */
     line-height: 1.5;
     transition: var(--transition);
