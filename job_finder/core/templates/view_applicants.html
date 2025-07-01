@@ -27,4 +27,13 @@
     {% endfor %}
   </ul>
 </div>
+{% if user.is_authenticated and user.role == 'employer' %}
+  <a href="/profile/" class="fab-btn" style="bottom: 140px; background: var(--primary-color);">
+    <span class="material-icons">person</span>
+  </a>
+  <a href="/employer/applications/" class="fab-btn" style="bottom: 80px; background: var(--accent-color);">
+    <span class="material-icons">inbox</span>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.8rem;">{{ total_applications }}</span>
+  </a>
+{% endif %}
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div id="tab-content-home" class="tab-content-x" style="margin-top: 30px;">
+<div id="tab-content-home" class="tab-content-x">
     <div class="tweet-box">
         <form method="get" class="row g-2 align-items-center">
             <div class="col-12 col-md-3">
@@ -44,8 +44,8 @@
             {{ job.description|truncatewords:30 }}
             {% if job.image or job.image == None %}
             <div class="mt-2">
-                <img src="{% if job.image %}{{ job.image.url }}{% else %}https://static.vecteezy.com/system/resources/previews/009/971/674/non_2x/we-are-hiring-hanging-signs-on-yellow-background-education-concept-for-business-marketing-flyers-banners-presentations-and-posters-illustration-vector.jpg{% endif %}"
-                     alt="Job Post Image" class="img-fluid rounded-4 w-100" style="max-height: 280px; object-fit: cover; background: #eee;">
+                <img src="{% if job.image %}{{ job.image.url }}{% else %}{% static 'we-are-hiring.png' %}{% endif %}"
+                     alt="Job Post Image" class="img-fluid rounded-4 w-100" style="max-height: 320px; object-fit: cover; background: #eee;">
             </div>
             {% endif %}
             <div class="mt-2">
@@ -63,6 +63,29 @@
         </div>
     </div>
     {% endfor %}
+    <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Job pagination">
+            <ul class="pagination">
+                {% if jobs.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.location %}location={{ request.GET.location }}&{% endif %}page={{ jobs.previous_page_number }}">Previous</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                {% endif %}
+                <li class="page-item active"><span class="page-link">{{ jobs.number }}</span></li>
+                {% if jobs.has_next %}
+                    <li class="page-item"><a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.location %}location={{ request.GET.location }}&{% endif %}page={{ jobs.next_page_number }}">Next</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% if user.is_authenticated and user.role == 'employer' %}
+    <a href="/employer/applications/" class="fab-btn" style="bottom: 80px; background: var(--accent-color);">
+        <span class="material-icons">inbox</span>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.8rem;">{{ total_applications }}</span>
+    </a>
+    {% endif %}
 </div>
 <div id="tab-content-explore" class="tab-content-x" style="display:none">
     <div class="tweet">
