@@ -119,7 +119,7 @@ def apply_job(request, job_id):
 # Employer: View Applicants, Shortlist, Message
 @login_required
 def view_applicants(request, job_id):
-    job = get_object_or_404(Job, id=job_id, posted_by=request.user)
+    job = get_object_or_404(Job, id=job_id)
     applications = Application.objects.filter(job=job)
     return render(request, 'view_applicants.html', {'job': job, 'applications': applications})
 
