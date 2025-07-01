@@ -4,10 +4,13 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, JobForm, ProfileForm, ApplicationForm
 from .models import Job, Category, Company, Profile, Application, User, Message
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Max, Count
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout as auth_logout
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # User Registration
 
@@ -59,7 +62,10 @@ def job_list(request):
         jobs = jobs.filter(Q(title__icontains=search) | Q(description__icontains=search))
     categories = Category.objects.all()
     companies = Company.objects.all()
-    return render(request, 'job_list.html', {'jobs': jobs, 'categories': categories, 'companies': companies})
+    unread_count = 0
+    if request.user.is_authenticated:
+        unread_count = request.user.received_messages.filter(is_read=False).count()
+    return render(request, 'job_list.html', {'jobs': jobs, 'categories': categories, 'companies': companies, 'unread_count': unread_count})
 
 # Job Detail
 
@@ -141,3 +147,55 @@ def send_message(request, recipient_id):
             messages.success(request, 'Message sent!')
             return redirect('profile')
     return render(request, 'send_message.html', {'recipient': recipient})
+
+@login_required
+def messages_list(request):
+    user = request.user
+    # Get all users who have sent or received messages with this user
+    contacts = User.objects.filter(
+        Q(sent_messages__recipient=user) | Q(received_messages__sender=user)
+    ).exclude(id=user.id).distinct()
+    conversations = []
+    for contact in contacts:
+        last_msg = Message.objects.filter(
+            (Q(sender=user, recipient=contact) | Q(sender=contact, recipient=user))
+        ).order_by('-sent_at').first()
+        unread_count = Message.objects.filter(sender=contact, recipient=user, is_read=False).count()
+        conversations.append({'user': contact, 'last_msg': last_msg, 'unread_count': unread_count})
+    # Sort by last message time
+    conversations.sort(key=lambda x: x['last_msg'].sent_at if x['last_msg'] else None, reverse=True)
+    return render(request, 'messages_list.html', {'conversations': conversations})
+
+@login_required
+def inbox(request, recipient_id):
+    recipient = get_object_or_404(User, id=recipient_id)
+    # Mark all messages sent to the user as read
+    Message.objects.filter(sender=recipient, recipient=request.user, is_read=False).update(is_read=True)
+    return render(request, 'inbox.html', {'recipient': recipient})
+
+@login_required
+def ajax_messages(request, recipient_id):
+    recipient = get_object_or_404(User, id=recipient_id)
+    messages_qs = Message.objects.filter(
+        (Q(sender=request.user, recipient=recipient) | Q(sender=recipient, recipient=request.user))
+    ).order_by('timestamp')
+    messages = [
+        {
+            'content': m.content,
+            'timestamp': m.timestamp.strftime('%Y-%m-%d %H:%M'),
+            'is_sender': m.sender == request.user
+        } for m in messages_qs
+    ]
+    return JsonResponse({'messages': messages})
+
+@csrf_exempt
+@login_required
+def ajax_send_message(request, recipient_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        content = data.get('content')
+        recipient = get_object_or_404(User, id=recipient_id)
+        if content:
+            Message.objects.create(sender=request.user, recipient=recipient, content=content)
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error'}, status=400)

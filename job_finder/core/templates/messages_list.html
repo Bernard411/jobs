@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-3">
+    <h4 class="mb-3">Your Conversations</h4>
+    <ul class="list-group">
+        {% for convo in conversations %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'inbox' convo.user.id %}">
+                {{ convo.user.get_full_name|default:convo.user.username }}
+            </a>
+            {% if convo.unread_count > 0 %}
+            <span class="badge bg-danger rounded-pill">{{ convo.unread_count }}</span>
+            {% endif %}
+        </li>
+        {% empty %}
+        <li class="list-group-item">No conversations yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

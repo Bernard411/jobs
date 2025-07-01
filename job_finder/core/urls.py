@@ -13,4 +13,8 @@ urlpatterns = [
     path('job/<int:job_id>/applicants/', views.view_applicants, name='view_applicants'),
     path('application/<int:application_id>/shortlist/', views.shortlist_applicant, name='shortlist_applicant'),
     path('message/<int:recipient_id>/', views.send_message, name='send_message'),
+    path('inbox/<int:recipient_id>/', views.inbox, name='inbox'),
+    path('messages/ajax/<int:recipient_id>/', views.ajax_messages, name='ajax_messages'),
+    path('messages/ajax/send/<int:recipient_id>/', views.ajax_send_message, name='ajax_send_message'),
+    path('messages/', views.messages_list, name='messages_list'),
 ]
