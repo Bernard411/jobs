@@ -24,6 +24,39 @@
     <link rel="manifest" href="{% static 'manifest.json' %}">
     <!-- Theme color for Chrome -->
     <meta name="theme-color" content="#ffffff">
+    <style>
+    .fab-btn {
+        position: fixed;
+        bottom: 80px;
+        right: 24px;
+        z-index: 1050;
+        background: var(--primary-gradient, #007bff);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+    .fab-btn:hover {
+        background: #0056b3;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+    }
+    @media (max-width: 576px) {
+        .fab-btn {
+            right: 16px;
+            bottom: 70px;
+            width: 48px;
+            height: 48px;
+            font-size: 1.6rem;
+        }
+    }
+    </style>
 </head>
 <body>
     <!-- Top Navigation -->
@@ -47,6 +80,12 @@
       {% endif %}
       {% block content %}{% endblock %}
     </div>
+    <!-- Floating Action Button -->
+    {% if user.is_authenticated and user.role == 'employer' %}
+    <a href="{% url 'post_job' %}" class="fab-btn" title="Post a Job" style="text-decoration: none;">
+        <span class="material-icons">add</span>
+    </a>
+    {% endif %}
     <!-- Bottom Navigation -->
     <nav class="bottom-nav-x fixed-bottom">
         <a href="/" class="nav-item-x text-center {% if request.path == '/' %}active{% endif %}" id="tab-home">
@@ -80,19 +119,5 @@
         {% endif %}
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Theme toggle for dark/light mode
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('light-theme');
-            localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-            // Toggle icon between dark_mode and light_mode
-            const icon = this.querySelector('.material-icons');
-            icon.textContent = document.body.classList.contains('light-theme') ? 'light_mode' : 'dark_mode';
-        });
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-theme');
-            document.getElementById('themeToggle').querySelector('.material-icons').textContent = 'light_mode';
-        }
-    </script>
 </body>
 </html>
