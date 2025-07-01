@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Applicants for {{ job.title }}</h2>
+<ul>
+  {% for app in applications %}
+    <li>
+      {{ app.applicant.username }}
+      {% if app.shortlisted %}<strong>(Shortlisted)</strong>{% else %}
+        <a href="{% url 'shortlist_applicant' app.id %}">Shortlist</a>
+      {% endif %}
+      <a href="{% url 'send_message' app.applicant.id %}">Message</a>
+    </li>
+  {% empty %}
+    <li>No applicants yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

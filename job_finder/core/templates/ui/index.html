@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Twitter/X-like Progressive Web App">
+    <meta name="theme-color" content="#15202b">
+    <title>Twitter X PWA</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/assets/x-icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            background-color: #15202b;
+            color: #d9d9d9;
+            font-family: 'Segoe UI', 'system-ui', 'Arial', 'sans-serif';
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar-x {
+            background-color: #15202b;
+            border-bottom: 1px solid #38444d;
+        }
+        .navbar-x .navbar-brand {
+            font-weight: bold;
+            color: #1da1f2 !important;
+            font-size: 1.7rem;
+            letter-spacing: 1px;
+        }
+        .navbar-x .btn-link, .navbar-x .bi {
+            color: #d9d9d9 !important;
+        }
+        .navbar-x .btn-link:hover {
+            color: #1da1f2 !important;
+        }
+        .container {
+            margin-top: 70px;
+            margin-bottom: 70px;
+        }
+        /* --- Bottom Nav as Tabs --- */
+        .bottom-nav-x {
+            background-color: #15202b;
+            border-top: 1px solid #38444d;
+            color: #d9d9d9;
+            display: flex;
+            justify-content: space-around;
+            padding: 0;
+            height: 60px;
+        }
+        .nav-item-x {
+            flex: 1;
+            color: #d9d9d9;
+            text-decoration: none;
+            opacity: 0.7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            transition: color 0.2s, opacity 0.2s, background 0.2s;
+            border-bottom: 3px solid transparent;
+            height: 100%;
+        }
+        .nav-item-x.active {
+            color: #1da1f2;
+            opacity: 1;
+            background: rgba(29,161,242,0.08);
+            border-bottom: 3px solid #1da1f2;
+        }
+        .nav-item-x i {
+            font-size: 1.6rem;
+            margin-bottom: 0.1rem;
+        }
+        .nav-item-x:hover {
+            color: #1da1f2;
+            opacity: 1;
+            background: rgba(29,161,242,0.04);
+        }
+        .tweet-btn {
+            background: #1da1f2;
+            color: #fff;
+            border-radius: 999px;
+            font-weight: bold;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            margin-left: 1rem;
+            transition: background 0.2s;
+        }
+        .tweet-btn:hover {
+            background: #1991da;
+        }
+        .tweet-box {
+            background: #192734;
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .tweet-box textarea {
+            background: transparent;
+            border: none;
+            color: #d9d9d9;
+            width: 100%;
+            resize: none;
+            font-size: 1.1rem;
+        }
+        .tweet-box textarea:focus {
+            outline: none;
+        }
+        .tweet {
+            background: #192734;
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .tweet .tweet-author {
+            font-weight: bold;
+            color: #fff;
+        }
+        .tweet .tweet-handle {
+            color: #8899a6;
+            font-size: 0.95rem;
+        }
+        .tweet .tweet-content {
+            margin-top: 0.5rem;
+            color: #d9d9d9;
+        }
+        /* --- Light Theme --- */
+        body.light-theme {
+            background-color: #fff;
+            color: #0f1419;
+        }
+        body.light-theme .navbar-x {
+            background-color: #fff;
+            border-bottom: 1px solid #e6ecf0;
+        }
+        body.light-theme .navbar-x .navbar-brand {
+            color: #1da1f2 !important;
+        }
+        body.light-theme .navbar-x .btn-link, 
+        body.light-theme .navbar-x .bi {
+            color: #0f1419 !important;
+        }
+        body.light-theme .navbar-x .btn-link:hover {
+            color: #1da1f2 !important;
+        }
+        body.light-theme .bottom-nav-x {
+            background-color: #fff;
+            border-top: 1px solid #e6ecf0;
+            color: #0f1419;
+        }
+        body.light-theme .nav-item-x {
+            color: #0f1419;
+        }
+        body.light-theme .nav-item-x.active {
+            color: #1da1f2;
+            background: rgba(29,161,242,0.08);
+            border-bottom: 3px solid #1da1f2;
+        }
+        body.light-theme .nav-item-x:hover {
+            color: #1da1f2;
+            background: rgba(29,161,242,0.04);
+        }
+        body.light-theme .tweet-box,
+        body.light-theme .tweet {
+            background: #f7f9fa;
+            color: #0f1419;
+        }
+        body.light-theme .tweet .tweet-author {
+            color: #0f1419;
+        }
+        body.light-theme .tweet .tweet-handle {
+            color: #536471;
+        }
+        @media (max-width: 576px) {
+            .container {
+                padding-bottom: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand navbar-x fixed-top">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <span class="navbar-brand"><i class="bi bi-twitter-x"></i> X</span>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link" id="themeToggle" title="Toggle theme">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </button>
+                <button class="btn btn-link" title="Search">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="btn btn-link" title="Settings">
+                    <i class="bi bi-gear"></i>
+                </button>
+                <button class="tweet-btn d-none d-sm-inline">Post</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <!-- Tab Content: Home -->
+        <div id="tab-content-home" class="tab-content-x">
+            <div class="tweet-box">
+                <div class="d-flex align-items-start">
+                    <img src="/assets/user.png" alt="User" width="48" height="48" class="rounded-circle me-2">
+                    <textarea rows="2" placeholder="What is happening?!" maxlength="280"></textarea>
+                </div>
+                <div class="d-flex justify-content-end mt-2">
+                    <button class="tweet-btn">Post</button>
+                </div>
+            </div>
+            <div class="tweet">
+                <div class="d-flex align-items-center">
+                    <img src="/assets/user.png" alt="User" width="40" height="40" class="rounded-circle me-2">
+                    <div>
+                        <span class="tweet-author">Jane Doe</span>
+                        <span class="tweet-handle ms-1">@janedoe · 1h</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    This is a sample tweet! Welcome to your Twitter X PWA.
+                </div>
+            </div>
+        </div>
+        <!-- Tab Content: Explore -->
+        <div id="tab-content-explore" class="tab-content-x" style="display:none">
+            <div class="tweet">
+                <div class="tweet-content">
+                    <b>Explore trending topics!</b><br>
+                    #AI #WebDevelopment #TechNews #OpenSource
+                </div>
+            </div>
+        </div>
+        <!-- Tab Content: Notifications -->
+        <div id="tab-content-notifications" class="tab-content-x" style="display:none">
+            <div class="tweet">
+                <div class="tweet-content">
+                    <b>No new notifications.</b>
+                </div>
+            </div>
+        </div>
+        <!-- Tab Content: Messages -->
+        <div id="tab-content-messages" class="tab-content-x" style="display:none">
+            <div class="tweet">
+                <div class="tweet-content">
+                    <b>Your messages will appear here.</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav-x fixed-bottom">
+        <a href="#home" class="nav-item-x text-center active" id="tab-home">
+            <i class="bi bi-house-door-fill"></i>
+            <span>Home</span>
+        </a>
+        <a href="#explore" class="nav-item-x text-center" id="tab-explore">
+            <i class="bi bi-hash"></i>
+            <span>Explore</span>
+        </a>
+        <a href="#notifications" class="nav-item-x text-center" id="tab-notifications">
+            <i class="bi bi-bell-fill"></i>
+            <span>Notifications</span>
+        </a>
+        <a href="#messages" class="nav-item-x text-center" id="tab-messages">
+            <i class="bi bi-envelope-fill"></i>
+            <span>Messages</span>
+        </a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/js/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+        // Theme toggle for dark/light mode
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('light-theme');
+            localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        });
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+        }
+        // Tab navigation active state and content switching
+        const tabMap = {
+            'tab-home': 'tab-content-home',
+            'tab-explore': 'tab-content-explore',
+            'tab-notifications': 'tab-content-notifications',
+            'tab-messages': 'tab-content-messages'
+        };
+        document.querySelectorAll('.nav-item-x').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item-x').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // Hide all tab contents
+                Object.values(tabMap).forEach(id => {
+                    document.getElementById(id).style.display = 'none';
+                });
+                // Show selected tab content
+                document.getElementById(tabMap[this.id]).style.display = '';
+            });
+        });
+    </script>
+</body>
+</html>

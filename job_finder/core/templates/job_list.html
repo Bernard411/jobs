@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div id="tab-content-home" class="tab-content-x">
+    <div class="tweet-box">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-12 col-md-3">
+                <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search jobs, companies, categories...">
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="category" class="form-control">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="company" class="form-control">
+                    <option value="">All Companies</option>
+                    {% for comp in companies %}
+                        <option value="{{ comp.id }}" {% if request.GET.company == comp.id|stringformat:'s' %}selected{% endif %}>{{ comp.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-md-2">
+                <input type="text" name="location" value="{{ request.GET.location }}" class="form-control" placeholder="Location">
+            </div>
+            <div class="col-12 col-md-1 d-grid">
+                <button type="submit" class="tweet-btn">Filter</button>
+            </div>
+        </form>
+    </div>
+    {% for job in jobs %}
+    <div class="tweet">
+        <div class="d-flex align-items-center mb-2">
+            <img src="{% static 'user.png' %}" alt="User" width="40" height="40" class="rounded-circle me-2">
+            <div>
+                <span class="tweet-author">{{ job.title }}</span>
+                <span class="tweet-handle ms-2">@{{ job.company.name }} · {{ job.location }}</span>
+            </div>
+        </div>
+        <div class="tweet-content">
+            {{ job.description|truncatewords:30 }}
+            {% if job.image or job.image == None %}
+            <div class="mt-2">
+                <img src="{% if job.image %}{{ job.image.url }}{% else %}https://static.vecteezy.com/system/resources/previews/009/971/674/non_2x/we-are-hiring-hanging-signs-on-yellow-background-education-concept-for-business-marketing-flyers-banners-presentations-and-posters-illustration-vector.jpg{% endif %}"
+                     alt="Job Post Image" class="img-fluid rounded-4 w-100" style="max-height: 320px; object-fit: cover; background: #eee;">
+            </div>
+            
+            {% endif %}
+            <div class="mt-2">
+                <a href="{% url 'job_detail' job.id %}" class="btn btn-sm btn-outline-info">View</a>
+                {% if user.is_authenticated and user.role == 'job_seeker' %}
+                <a href="{% url 'apply_job' job.id %}" class="btn btn-sm btn-outline-success">Apply</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="tweet">
+        <div class="tweet-content">
+            <b>No jobs found.</b>
+        </div>
+    </div>
+    {% endfor %}
+   -->
+</div>
+<div id="tab-content-explore" class="tab-content-x" style="display:none">
+    <div class="tweet">
+        <div class="tweet-content">
+            <b>Explore trending categories and companies!</b><br>
+            {% for cat in categories %}#{{ cat.name }} {% endfor %}
+        </div>
+    </div>
+</div>
+<div id="tab-content-notifications" class="tab-content-x" style="display:none">
+    <div class="tweet">
+        <div class="tweet-content">
+            <b>No new notifications.</b>
+        </div>
+    </div>
+</div>
+<div id="tab-content-messages" class="tab-content-x" style="display:none">
+    <div class="tweet">
+        <div class="tweet-content">
+            <b>Your messages will appear here.</b>
+        </div>
+    </div>
+</div>
+<script>
+    // Tab navigation active state and content switching
+    const tabMap = {
+        'tab-home': 'tab-content-home',
+        'tab-explore': 'tab-content-explore',
+        'tab-notifications': 'tab-content-notifications',
+        'tab-messages': 'tab-content-messages'
+    };
+    document.querySelectorAll('.nav-item-x').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.nav-item-x').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            // Hide all tab contents
+            Object.values(tabMap).forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            // Show selected tab content
+            document.getElementById(tabMap[this.id]).style.display = '';
+        });
+    });
+</script>
+{% endblock %}

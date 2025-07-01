@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Profile</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save Profile</button>
+</form>
+{% if user.profile.cv %}
+  <p>Current CV: <a href="{{ user.profile.cv.url }}">Download</a></p>
+{% endif %}
+{% endblock %}
