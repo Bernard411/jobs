@@ -3,7 +3,7 @@
 {% block content %}
 <div class="tweet" style="max-width: 600px; margin: 0 auto;">
   <div class="d-flex align-items-center mb-3">
-    <img src="{% if job.image %}{{ job.image.url }}{% else %}{% static 'we-are-hiring.png' %}{% endif %}" alt="Job Image" width="64" height="64" class="rounded-3 object-fit-cover me-3" style="object-fit:cover;">
+    <img src="{% if job.image %}{{ job.image.url }}{% else %}https://static.vecteezy.com/system/resources/thumbnails/028/594/391/small_2x/animated-text-we-are-hiring-join-our-team-isolated-object-on-red-background-search-and-recruitment-business-concept-free-video.jpg{% endif %}" alt="Job Image" width="64" height="64" class="rounded-3 object-fit-cover me-3" style="object-fit:cover;">
     <div>
       <h2 class="tweet-author mb-1" style="font-size:1.3rem;">{{ job.title }}</h2>
       <div class="tweet-handle">@{{ job.company.name }} · {{ job.location }}</div>

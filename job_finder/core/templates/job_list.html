@@ -34,7 +34,7 @@
     {% for job in jobs %}
     <div class="tweet">
         <div class="d-flex align-items-center mb-2">
-            <img src="{% static 'user.png' %}" alt="User" width="40" height="40" class="rounded-circle me-2">
+            <img src="https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg?semt=ais_hybrid&w=740" alt="User" width="40" height="40" class="rounded-circle me-2">
             <div>
                 <span class="tweet-author">{{ job.title }}</span>
                 <span class="tweet-handle ms-2">@{{ job.company.name }} · {{ job.location }}</span>
@@ -44,7 +44,7 @@
             {{ job.description|truncatewords:30 }}
             {% if job.image or job.image == None %}
             <div class="mt-2">
-                <img src="{% if job.image %}{{ job.image.url }}{% else %}{% static 'we-are-hiring.png' %}{% endif %}"
+                <img src="{% if job.image %}{{ job.image.url }}{% else %}https://static.vecteezy.com/system/resources/thumbnails/028/594/391/small_2x/animated-text-we-are-hiring-join-our-team-isolated-object-on-red-background-search-and-recruitment-business-concept-free-video.jpg{% endif %}"
                      alt="Job Post Image" class="img-fluid rounded-4 w-100" style="max-height: 320px; object-fit: cover; background: #eee;">
             </div>
             {% endif %}

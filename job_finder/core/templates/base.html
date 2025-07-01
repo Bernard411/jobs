@@ -67,11 +67,18 @@
                 <span>seeker malawi</span>
             </a>
             <div class="d-flex align-items-center">
+                      {% if user.is_authenticated %}
                 <a href="{% url 'messages_list' %}" class="btn btn-link position-relative">
                     <span class="material-icons">mail_outline</span>
                     {% if unread_count > 0 %}
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.8rem;">{{ unread_count }}</span>
                     {% endif %}
+                </a>
+                      {% else %}
+                      <a href="{% url 'login' %}" class="btn btn-link position-relative">
+                    <span class="material-icons">login</span>
+                   {% endif %}
+                
                 </a>
             </div>
         </div>
@@ -91,6 +98,7 @@
     </a>
     {% endif %}
     <!-- Bottom Navigation -->
+       {% if user.is_authenticated %}
     <nav class="bottom-nav-x fixed-bottom">
         <a href="/" class="nav-item-x text-center {% if request.path == '/' %}active{% endif %}" id="tab-home">
             <span class="material-icons">work</span>
@@ -122,6 +130,7 @@
         </a>
         {% endif %}
     </nav>
+     {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

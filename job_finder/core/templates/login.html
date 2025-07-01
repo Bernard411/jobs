@@ -1,19 +1,416 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<div class="tweet-box" style="width: 100%; margin: 0 auto;">
-  <h2 class="mb-3" style="font-size:1.3rem; font-weight:700; color:var(--primary-color);">Login</h2>
-  <form method="post" class="d-flex flex-column gap-2">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    {% for field in form %}
-      <div class="mb-2">
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
-        {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
-      </div>
-    {% endfor %}
-    <button type="submit" class="tweet-btn w-100 mt-2">Login</button>
-  </form>
+<div class="login-container">
+    <div class="login-card">
+        <h2>Sign in to Seeker Malawi</h2>
+        <form method="post" class="d-flex flex-column">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div class="input-group mb-2">
+                    <span class="input-group-text">
+                        <span class="material-icons">
+                            {% if field.label == "Username" %}person{% elif field.label == "Password" %}lock{% endif %}
+                        </span>
+                    </span>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="tweet-btn w-100 mt-2">Sign In</button>
+            <div class="text-center mt-3">
+                <small>
+                    Don't have an account? 
+                    <a href="{% url 'register' %}" class="text-accent">Sign up</a>
+                </small>
+            </div>
+        </form>
+    </div>
 </div>
+<style>
+    :root {
+    --primary-color: #1dbf73; /* Fiverr green for primary actions */
+    --primary-light: #e6f5ed; /* Light green for backgrounds */
+    --primary-gradient: linear-gradient(135deg, #1dbf73, #17a05d);
+    --secondary-color: #404145; /* Deep gray for contrast */
+    --accent-color: #7a4bd0; /* Fiverr purple for secondary actions */
+    --border-color: #e4e5e7; /* Soft gray for borders */
+    --bg-color: #ffffff; /* Clean white for background */
+    --card-bg: #ffffff; /* White for cards */
+    --text-color: #222325; /* Dark gray for text */
+    --light-text: #62646a; /* Mid-gray for secondary text */
+    --shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.15);
+    --transition: all 0.2s ease;
+}
+
+/* General Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'DM Sans', 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Navbar Styling */
+.navbar-x {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 0.5rem 0.75rem;
+}
+
+.navbar-x .navbar-brand {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color) !important;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-x .navbar-brand img {
+    height: 32px;
+    transition: transform 0.2s ease;
+}
+
+.navbar-x .navbar-brand:hover img {
+    transform: scale(1.05);
+}
+
+.navbar-x .btn-link {
+    color: var(--text-color) !important;
+    font-size: 1rem;
+    padding: 0.3rem;
+    transition: var(--transition);
+}
+
+.navbar-x .btn-link:hover {
+    color: var(--primary-color) !important;
+    background: var(--primary-light);
+    border-radius: 6px;
+}
+
+/* Container */
+.container {
+    margin-top: 60px;
+    margin-bottom: 60px;
+    max-width: 900px;
+    padding: 0 0.75rem;
+}
+
+/* Form Styling (General) */
+.tweet-box {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.tweet-box:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.tweet-box form {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+input, select {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    background: #fff;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+input:focus, select:focus {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+    box-shadow: 0 0 0 2px rgba(29, 191, 115, 0.2);
+    outline: none;
+}
+
+.tweet-btn {
+    background: var(--primary-gradient);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.tweet-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Job Post Styling */
+.tweet {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.tweet:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.tweet .tweet-author {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.tweet .tweet-handle {
+    font-size: 0.85rem;
+    color: var(--light-text);
+}
+
+.tweet .tweet-content {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-top: 0.3rem;
+}
+
+.tweet img {
+    border-radius: 10px;
+    max-height: 280px;
+    transition: var(--transition);
+}
+
+.tweet img
+
+:hover {
+    opacity: 0.9;
+    filter: brightness(95%);
+}
+
+.tweet .btn {
+    margin-right: 0.4rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.tweet .btn-outline-info {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.tweet .btn-outline-info:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.tweet .btn-outline-success {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.tweet .btn-outline-success:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+/* Bottom Navigation */
+.bottom-nav-x {
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+}
+
+.nav-item-x {
+    flex: 1;
+    color: var(--text-color);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.nav-item-x .material-icons {
+    font-size: 1.2rem;
+    margin-bottom: 0.1rem;
+}
+
+.nav-item-x.active {
+    color: var(--primary-color);
+    background: var(--primary-light);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.nav-item-x:hover {
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+/* Login Page Styling */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px); /* Account for navbar and bottom nav */
+    padding: 1rem;
+    background: var(--bg-color);
+}
+
+.login-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-width: 360px; /* Twitter/X-like card width */
+    width: 100%;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.login-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.login-card h2 {
+    font-size: 1.5rem; /* Slightly larger for Twitter/X feel */
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.login-card .input-group {
+    position: relative;
+    width: 100%;
+}
+
+.login-card .input-group-text {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.login-card .input-group-text .material-icons {
+    font-size: 1.2rem;
+    color: var(--light-text);
+}
+
+.login-card input {
+    width: 100%;
+    border:R 1px solid var(--border-color);
+    border-radius: 0 6px 6px 0;
+    padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+    font-size: 0.9rem;
+    background: #fff;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.login-card input:focus {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+    box-shadow: 0 0 0 2px rgba(29, 191, 115, 0.2);
+    outline: none;
+}
+
+.login-card .form-text {
+    font-size: 0.8rem;
+    color: var(--light-text);
+}
+
+.login-card .text-danger {
+    font-size: 0.8rem;
+    color: #dc3545; /* Bootstrap danger color for errors */
+}
+
+.login-card .tweet-btn {
+    background: var(--primary-gradient);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 24px; /* Twitter/X-like rounded button */
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.login-card .tweet-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+.login-card .text-accent {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-card .text-accent:hover {
+    color: #5e3a9f; /* Darker purple for hover */
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .container {
+        margin-top: 50px;
+        margin-bottom: 60px;
+        padding: 0 0.5rem;
+    }
+
+    .tweet-box form .col-12 {
+        margin-bottom: 0.3rem;
+    }
+
+    .tweet-box .tweet-btn {
+        width: 100%;
+        padding: 0.5rem;
+    }
+
+    .navbar-x .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    .navbar-x .btn-link {
+        font-size: 0.9
+</style>
 {% endblock %}
