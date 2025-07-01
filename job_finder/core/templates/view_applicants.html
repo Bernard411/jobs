@@ -1,17 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Applicants for {{ job.title }}</h2>
-<ul>
-  {% for app in applications %}
-    <li>
-      {{ app.applicant.username }}
-      {% if app.shortlisted %}<strong>(Shortlisted)</strong>{% else %}
-        <a href="{% url 'shortlist_applicant' app.id %}">Shortlist</a>
-      {% endif %}
-      <a href="{% url 'send_message' app.applicant.id %}">Message</a>
-    </li>
-  {% empty %}
-    <li>No applicants yet.</li>
-  {% endfor %}
-</ul>
+<div class="tweet-box" style="max-width: 600px; margin: 0 auto;">
+  <h2 class="mb-3" style="font-size:1.2rem; font-weight:700; color:var(--primary-color);">Applicants for {{ job.title }}</h2>
+  <ul class="list-unstyled">
+    {% for app in applications %}
+      <li class="tweet d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <span class="fw-bold">{{ app.applicant.username }}</span>
+          {% if app.shortlisted %}
+            <span class="badge bg-success ms-2">Shortlisted</span>
+          {% endif %}
+        </div>
+        <div>
+          {% if not app.shortlisted %}
+            <a href="{% url 'shortlist_applicant' app.id %}" class="btn btn-sm btn-outline-success me-2">Shortlist</a>
+          {% endif %}
+          <a href="{% url 'send_message' app.applicant.id %}" class="btn btn-sm btn-outline-info">Message</a>
+        </div>
+      </li>
+    {% empty %}
+      <li class="tweet">
+        <div class="tweet-content">
+          No applicants yet.
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}

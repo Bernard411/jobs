@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Send Message to {{ recipient.username }}</h2>
-<form method="post">
-  {% csrf_token %}
-  <textarea name="content" rows="4" cols="40" required></textarea><br>
-  <button type="submit">Send</button>
-</form>
+<div class="tweet-box" style="max-width: 400px; margin: 0 auto;">
+  <h2 class="mb-3" style="font-size:1.2rem; font-weight:700; color:var(--primary-color);">Send Message to {{ recipient.username }}</h2>
+  <form method="post" class="d-flex flex-column gap-2">
+    {% csrf_token %}
+    <div class="mb-2">
+      <textarea name="content" rows="4" class="form-control" required placeholder="Type your message..."></textarea>
+    </div>
+    <button type="submit" class="tweet-btn w-100 mt-2">Send</button>
+  </form>
+</div>
 {% endblock %}

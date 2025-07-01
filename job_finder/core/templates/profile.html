@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>My Profile</h2>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save Profile</button>
-</form>
-{% if user.profile.cv %}
-  <p>Current CV: <a href="{{ user.profile.cv.url }}">Download</a></p>
-{% endif %}
+<div class="tweet-box" style="max-width: 500px; margin: 0 auto;">
+  <h2 class="mb-3" style="font-size:1.2rem; font-weight:700; color:var(--primary-color);">My Profile</h2>
+  <form method="post" enctype="multipart/form-data" class="d-flex flex-column gap-2">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <div class="mb-2">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+        {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="tweet-btn w-100 mt-2">Save Profile</button>
+  </form>
+  {% if user.profile.cv %}
+    <div class="mt-3">
+      <span class="fw-bold">Current CV:</span> <a href="{{ user.profile.cv.url }}" class="link-primary">Download</a>
+    </div>
+  {% endif %}
+</div>
 {% endblock %}
