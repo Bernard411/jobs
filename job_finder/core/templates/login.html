@@ -10,10 +10,7 @@
             {% for field in form %}
                 <div class="input-group mb-2">
                     <span class="input-group-text">
-                        <span class="material-icons">
-                            {% if field.label == "Username" %}person{% elif field.label == "Password" %}lock{% endif %}
-                        </span>
-                    </span>
+                       
                     {{ field }}
                     {% if field.help_text %}
                         <small class="form-text text-muted">{{ field.help_text }}</small>
