@@ -1,0 +1,6 @@
+Plate: 6526, Type: bike, Duration: 0 hours, Fee: $1.00, Time: Wed Jul 02 07:59:07 CDT 2025
+Plate: 54254662, Type: car, Duration: 0 hours, Fee: $2.00, Time: Wed Jul 02 08:00:21 CDT 2025
+Plate: 34343, Type: bike, Duration: 0 hours, Fee: $1.00, Time: Wed Jul 02 08:03:02 CDT 2025
+Plate: 32323, Type: bike, Duration: 0 hours, Fee: MK1.00, Time: Wed Jul 02 08:03:29 CDT 2025
+Plate: 55363, Type: car, Duration: 0 hours, Fee: MK2.00, Time: Wed Jul 02 08:29:25 CDT 2025
+Plate: 5466, Type: bike, Duration: 0 hours, Fee: MK1500.00, Time: Wed Jul 02 08:30:48 CDT 2025
